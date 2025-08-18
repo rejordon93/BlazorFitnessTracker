@@ -19,6 +19,7 @@ public class NutritionService
     public async Task AddNutritionAsync(NutritionModel nutrition)
     {
         _context.Nutritions.Add(nutrition);
+        nutrition.Date = DateTime.UtcNow;
         await _context.SaveChangesAsync();
     }
 

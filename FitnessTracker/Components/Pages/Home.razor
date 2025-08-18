@@ -1,7 +1,61 @@
 ﻿@page "/"
+@using FitnessTracker.Models
+@using FitnessTracker.Services
+@inject NavigationManager NavigationManager
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">🏋️ Fitness Tracker!</h1>
 
-Welcome to your new app.
+    <h2 class="mt-5 text-center border-bottom pb-2">🍽️ Foods for Today</h2>
+
+    @if (nutrition.Any(n => n.Date.Date == DateTime.Now.Date))
+    {
+        <div class="row justify-content-center mt-3">
+            @foreach (var n in nutrition.Where(n => n.Date.Date == DateTime.Now.Date))
+            {
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title">@n.Food</h5>
+                            <p class="card-text">
+                                <span class="badge bg-primary">@n.Calories kcal</span><br />
+                                <small class="text-muted">Logged at @n.Date.ToShortTimeString()</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4">
+            <h4>
+                🔥 Total Calories Today: 
+                <span class="badge bg-success">
+                    @nutrition.Where(n => n.Date.Date == DateTime.Now.Date).Sum(n => n.Calories) cal
+                </span>
+            </h4>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center mt-3">
+            No foods logged today. 🥦
+        </div>
+    }
+</div>
+
+@code {
+    private List<WorkoutModel> workout = new();
+    private List<NutritionModel> nutrition = new();
+
+    [Inject] private WorkoutService workoutService { get; set; } = default!;
+    [Inject] private NutritionService nutritionService { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        workout = await workoutService.GetAllWorkoutsAsync();
+        nutrition = await nutritionService.GetAllNutritionAsync();
+    }
+}

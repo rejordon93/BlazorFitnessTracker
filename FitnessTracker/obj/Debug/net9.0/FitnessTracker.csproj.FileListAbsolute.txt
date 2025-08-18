@@ -214,3 +214,4 @@
 /Users/ethan93/Developer/C#/FitnessTracker/FitnessTracker/bin/Debug/net9.0/Microsoft.Extensions.Identity.Core.dll
 /Users/ethan93/Developer/C#/FitnessTracker/FitnessTracker/bin/Debug/net9.0/Microsoft.Extensions.Identity.Stores.dll
 /Users/ethan93/Developer/C#/FitnessTracker/FitnessTracker/bin/Debug/net9.0/BCrypt.Net-Next.dll
+/Users/ethan93/Developer/C#/FitnessTracker/FitnessTracker/obj/Debug/net9.0/FitnessTracker.sourcelink.json

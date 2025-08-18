@@ -1,0 +1,43 @@
+@page "/nutrition"
+@using FitnessTracker.Models
+@using FitnessTracker.Services
+@rendermode InteractiveServer
+
+<PageTitle>Nutrition Page</PageTitle>
+<h3>Nutrition</h3>
+
+<EditForm Model="nutritionEntry" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Food</label>
+        <InputText @bind-Value="nutritionEntry.Food" class="form-control" placeholder="Enter food name" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Calories</label>
+        <InputNumber @bind-Value="nutritionEntry.Calories" class="form-control" placeholder="Enter calories" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info mt-2">@message</div>
+}
+
+
+
+@code {
+    private NutritionModel nutritionEntry = new NutritionModel();
+    private string? message;
+    
+    [Inject] private NutritionService nutritionService { get; set; } = default!;
+
+    private async Task HandleSubmit()
+    {
+        await nutritionService.AddNutritionAsync(nutritionEntry);
+        message = "Nutrition added successfully!";
+        nutritionEntry = new NutritionModel();
+    }
+}

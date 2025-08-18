@@ -15,6 +15,9 @@ builder.Services.AddDbContext<FitnessContext>(options =>
 
 
 builder.Services.AddScoped<UserServices>();
+builder.Services.AddScoped<WorkoutService>();
+builder.Services.AddScoped<NutritionService>();
+
 
 
 var app = builder.Build();
