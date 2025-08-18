@@ -1,0 +1,49 @@
+@page "/register"
+@using FitnessTracker.Models
+@using FitnessTracker.Services
+
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+
+<h3>Register</h3>
+
+<PageTitle>Register Page</PageTitle>
+
+<EditForm Model="newUser" OnValidSubmit="AddUser">
+    <div class="mb-2">
+        <label>Username</label>
+        <InputText @bind-Value="newUser.Username" class="form-control" placeholder="Enter username" />
+    </div>
+    <div class="mb-2">
+        <label>Email</label>
+        <InputText @bind-Value="newUser.Email"  type="email" class="form-control" placeholder="Enter email" />
+    </div>
+    <div class="mb-2">
+        <label>Password</label>
+        <InputText @bind-Value="newUser.Password" type="password" class="form-control" placeholder="Enter password" />
+    </div>
+    <button type="submit" class="btn btn-primary">Register New User</button>
+</EditForm>
+
+@if (message is not null)
+{
+    <div class="alert alert-success">@message</div>
+}
+
+
+@code {
+    private UserModel newUser = new UserModel();
+    private string? message;
+    
+    [Inject]
+    private UserServices userServices { get; set; } = default!;
+
+    private async Task AddUser()
+    {
+        await userServices.RegisterUser(newUser);
+        newUser = new UserModel();
+        message = "User registered successfully!";
+        NavigationManager.NavigateTo("/login");
+    }
+}

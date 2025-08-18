@@ -1,0 +1,55 @@
+@page "/login"
+@using FitnessTracker.Models
+@using FitnessTracker.Services
+
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<PageTitle>Login</PageTitle>
+
+<h3>Login Page</h3>
+
+<EditForm Model="loginUser" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label>Email</label>
+        <InputText @bind-Value="loginUser.Email" type="email" class="form-control" placeholder="Enter email" />
+    </div>
+    <div class="mb-2">
+        <label>Password</label>
+        <InputText @bind-Value="loginUser.Password" type="password" class="form-control" placeholder="Enter password" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info mt-2">@message</div>
+}
+
+@code {
+    private UserModel loginUser = new UserModel();
+    private string? message;
+
+    [Inject]
+    private UserServices userServices { get; set; } = default!;
+
+    private async Task HandleLogin()
+    {
+        var user = await userServices.AuthenticateUserAsync(loginUser.Email, loginUser.Password);
+
+        if (user != null)
+        {
+            message = "User login successful!";
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            message = "Invalid email or password.";
+        }
+
+        loginUser = new UserModel();
+    }
+}
