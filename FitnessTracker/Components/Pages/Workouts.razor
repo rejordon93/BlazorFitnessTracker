@@ -1,10 +1,78 @@
 @page "/workouts"
+@using FitnessTracker.Models
+@using FitnessTracker.Services
 
+@rendermode InteractiveServer
 
 <PageTitle>Workouts Page</PageTitle>
 
-<h3>workouts</h3>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>Add Workout</h4>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="@workoutModel" OnValidSubmit="AddWorkout">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+
+                        <div class="mb-3">
+                            <label class="form-label">Exercise</label>
+                            <InputText @bind-Value="workoutModel.Exercise" class="form-control" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Reps</label>
+                                <InputNumber @bind-Value="workoutModel.Reps" class="form-control" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sets</label>
+                                <InputNumber @bind-Value="workoutModel.Sets" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Weight (optional)</label>
+                            <InputNumber @bind-Value="workoutModel.Weight" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Date</label>
+                            <InputDate @bind-Value="workoutModel.Date" class="form-control" />
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                💪 Save Workout
+                            </button>
+                        </div>
+                    </EditForm>
+
+                    @if (!string.IsNullOrEmpty(message))
+                    {
+                        <div class="alert alert-success text-center mt-3">
+                            @message
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
-    
+    private WorkoutModel workoutModel = new WorkoutModel();
+    private string? message;
+
+    [Inject] private WorkoutService workoutService { get; set; } = default!;
+
+    private async Task AddWorkout()
+    {
+        await workoutService.AddWorkoutAsync(workoutModel);
+        message = "Workout added successfully!";
+        workoutModel = new WorkoutModel(); // Reset form
+    }
 }

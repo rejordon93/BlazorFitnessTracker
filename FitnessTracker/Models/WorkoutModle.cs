@@ -6,8 +6,8 @@ public class WorkoutModel
     public string Exercise { get; set; } = string.Empty;
     public int Reps { get; set; }
     public int Sets { get; set; }
-    public double? Weight { get; set; } 
-    public DateTime Date { get; set; } = DateTime.Now;
+    public double? Weight { get; set; }
+    public DateTime Date { get; set; } = DateTime.UtcNow;
 
     // For linking to user in the future
     public int UserId { get; set; }
